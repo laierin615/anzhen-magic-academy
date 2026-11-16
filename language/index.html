@@ -92,6 +92,10 @@
   html.writing, html.writing body { overscroll-behavior: none; }
   .pad-wrap .ph { position: absolute; inset: 0; display: grid; place-items: center; color: rgba(34,34,34,.28); font-weight: 900; pointer-events: none; }
   .pad-wrap.locked canvas { cursor: default; }
+  .pad-wrap canvas { position: relative; z-index: 1; }
+  .pad-wrap .ghost { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--kai); font-weight: 400; line-height: 1; color: rgba(34, 34, 34, .17); pointer-events: none; padding-bottom: 5%; }
+  .btn.btn-hint { background: var(--lemon); }
+  .btn.btn-hint[aria-pressed="true"] { background: #fff; }
   .tool-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
   .tool-row .btn { min-height: 46px; padding: 8px 16px; }
 
@@ -114,7 +118,7 @@
 
   /* 自動批改結果 */
   .verdict { display: inline-block; margin-top: 18px; padding: 4px 18px; border: var(--bd); border-radius: 14px; box-shadow: var(--sh); font-weight: 900; font-size: 1.25rem; }
-  .verdict.ok { background: var(--mint); color: #fff; } .verdict.ng { background: var(--orange); }
+  .verdict.ok { background: var(--mint); color: #fff; } .verdict.ng { background: var(--orange); } .verdict.hint { background: var(--lemon); }
   .verdict small { display: block; font-size: .85rem; font-weight: 700; }
   .linkish { background: none; border: 0; padding: 4px; margin-top: 10px; font-weight: 700; font-size: .9rem; color: #1f5f8b; text-decoration: underline; }
 
@@ -261,8 +265,9 @@
       <p class="ask" id="qAsk"></p>
       <div class="word" id="qWord"></div>
       <div id="padZone" hidden>
-        <div class="pad-wrap" id="padWrap"><canvas id="pad" aria-label="手寫區：用手指寫出框框裡的國字"></canvas><div class="ph" id="padPh">在這裡寫字</div></div>
+        <div class="pad-wrap" id="padWrap"><div class="ghost" id="padGhost" aria-hidden="true" hidden></div><canvas id="pad" aria-label="手寫區：用手指寫出框框裡的國字"></canvas><div class="ph" id="padPh">在這裡寫字</div></div>
         <div class="tool-row" id="padTools">
+          <button class="btn btn-hint" id="hintBtn" type="button" aria-pressed="false">💡 提示</button>
           <button class="btn btn-ghost" id="undoBtn" type="button">↩️ 復原</button>
           <button class="btn btn-ghost" id="clearBtn" type="button">🧽 清除</button>
           <button class="btn btn-gold" id="submitPad" type="button">✅ 交卷</button>
@@ -523,18 +528,19 @@
   });
 
   // ---------- 自動批改：共用 ----------
-  function verdictHtml(ok, info) {
+  function verdictHtml(ok, info, hint) {
+    if (hint) return '<div class="verdict hint">💡 練習描寫' + (info ? '<small>' + info + '</small>' : '') + '</div>';
     return '<div class="verdict ' + (ok ? 'ok' : 'ng') + '">' + (ok ? '⭕ 答對了！' : '❌ 再想想，答案在下面') + (info ? '<small>' + info + '</small>' : '') + '</div>';
   }
-  function finishAuto(ok, info) {
+  function finishAuto(ok, info, hint) {
     var it = run.list[run.pos];
     run.revealed = true; run.autoOk = ok; run.autoInfo = info;
-    $('verdictBox').innerHTML = verdictHtml(ok, info);
+    $('verdictBox').innerHTML = verdictHtml(ok, info, hint);
     showAnswer(it);
     $('nextRow').hidden = false;
-    $('overrideBtn').hidden = false;
+    $('overrideBtn').hidden = !!hint;
     $('overrideBtn').textContent = ok ? '其實我寫錯了' : '電腦判錯了？算我答對';
-    say(ok ? pick(PRAISE) : '答案在下面，仔細看一次，下次就會了！', ok ? 'happy' : 'think');
+    say(hint ? '有描過就會記得更牢，錯題本裡再練一次！' : ok ? pick(PRAISE) : '答案在下面，仔細看一次，下次就會了！', ok || hint ? 'happy' : 'think');
     $('nextBtn').focus({ preventScroll: true });
     $('verdictBox').scrollIntoView({ block: 'center', behavior: 'smooth' });
   }
@@ -547,14 +553,16 @@
   $('nextBtn').addEventListener('click', function () { if (run && run.revealed) judge(run.autoOk); });
 
   // ---------- 字形：手寫格＋辨識 ----------
-  var pad = $('pad'), ctx = pad.getContext('2d'), strokes = [], cur = null, padLocked = false, padSize = 0;
+  var pad = $('pad'), ctx = pad.getContext('2d'), strokes = [], cur = null, padLocked = false, padSize = 0, padHinted = false;
   function padReset() {
     strokes = []; cur = null; padLocked = false;
     $('padWrap').classList.remove('locked'); $('padTools').hidden = false; $('padPh').hidden = false;
     $('submitPad').disabled = false;
+    padHinted = false; $('padGhost').hidden = true; $('hintBtn').setAttribute('aria-pressed', 'false'); $('hintBtn').textContent = '💡 提示';
+    if (run && run.list[run.pos]) $('padGhost').textContent = Array.from(run.list[run.pos].w)[run.list[run.pos].i];
     requestAnimationFrame(function () {
       var r = pad.getBoundingClientRect(), d = window.devicePixelRatio || 1;
-      padSize = r.width; pad.width = Math.round(r.width * d); pad.height = Math.round(r.height * d);
+      padSize = r.width; $('padGhost').style.fontSize = Math.round(r.width * .76) + 'px'; pad.width = Math.round(r.width * d); pad.height = Math.round(r.height * d);
       ctx.setTransform(d, 0, 0, d, 0, 0); redraw();
     });
   }
@@ -593,8 +601,18 @@
   }, { passive: false });
   function lockScroll() { document.documentElement.classList.add('writing'); }
   function unlockScroll() { document.documentElement.classList.remove('writing'); }
-  $('undoBtn').addEventListener('click', function () { strokes.pop(); if (!strokes.length) $('padPh').hidden = false; redraw(); });
-  $('clearBtn').addEventListener('click', function () { strokes = []; $('padPh').hidden = false; redraw(); });
+  function phBack() { if (!strokes.length && $('padGhost').hidden) $('padPh').hidden = false; }
+  $('undoBtn').addEventListener('click', function () { strokes.pop(); phBack(); redraw(); });
+  $('clearBtn').addEventListener('click', function () { strokes = []; phBack(); redraw(); });
+  // 提示：在格子裡顯示淺灰色的字，可以描著寫（用過提示的題目會記進錯題本）
+  $('hintBtn').addEventListener('click', function () {
+    if (!run || run.revealed || padLocked) return;
+    var on = $('padGhost').hidden;
+    $('padGhost').hidden = !on; $('hintBtn').setAttribute('aria-pressed', on ? 'true' : 'false');
+    $('hintBtn').textContent = on ? '🙈 藏起提示' : '💡 再看提示';
+    if (on) { padHinted = true; $('padPh').hidden = true; say('描著淺灰色的字寫一次，邊寫邊記住筆畫！', 'happy'); }
+    else { phBack(); say('提示藏起來了，憑記憶再寫寫看！', 'think'); }
+  });
 
   function recognize(ink, size) {
     var body = { options: 'enable_pre_space', requests: [{ writing_guide: { writing_area_width: size, writing_area_height: size }, ink: ink, language: 'zh_TW' }] };
@@ -617,6 +635,10 @@
     recognize(strokes, Math.round(padSize)).then(function (c) {
       $('padTools').hidden = true;
       var top = c.slice(0, 3), ok = top.indexOf(target) >= 0;
+      if (padHinted) {
+        finishAuto(false, ok ? '描得很好！這題看了提示，先放進錯題本，下次不看提示自己寫' : '這題看了提示，先放進錯題本，對照答案再描一次', true);
+        return;
+      }
       var info = c.length ? '電腦看到你寫的是「' + c[0] + '」' + (ok && c[0] !== target ? '，也可能是「' + target + '」，算你對！下次寫工整一點' : '') : '電腦認不出來，寫大一點、工整一點試試';
       finishAuto(ok, info);
     }).catch(function () {
