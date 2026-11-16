@@ -9,13 +9,22 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Chiron+GoRound+TC:wght@400;700;900&family=Huninn&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/academy.css">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏰</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23F0604D' stroke='%23222' stroke-width='7'/><text x='50' y='69' font-size='54' font-weight='900' text-anchor='middle' fill='white' font-family='PingFang TC,Microsoft JhengHei,sans-serif'>安</text></svg>">
 <style>
   .hero { text-align: center; padding: 18px 0 26px; }
   .hero .l1 { display: block; font-family: var(--hand); font-size: clamp(1.1rem, 3.8vw, 1.45rem); color: var(--ink-2); }
   .hero h1 { margin: 12px 0 0; font-size: clamp(2.1rem, 9vw, 3.6rem); }
   .hero .l3 { margin-top: 18px; background: var(--sky); font-family: var(--hand); font-weight: 400; font-size: 1.05rem; }
-  .hero .castle { font-size: 64px; line-height: 1; filter: drop-shadow(3px 3px 0 var(--ink)); }
+  .logo { position: relative; display: inline-grid; place-items: center; width: 112px; height: 112px; margin-bottom: 14px; border-radius: 50%;
+    background: var(--pink); border: 4px solid var(--ink); box-shadow: 5px 5px 0 var(--ink);
+    font-family: var(--hand); font-size: 64px; line-height: 1; color: #fff; text-shadow: 3px 3px 0 var(--ink);
+    animation: logoBob 3s ease-in-out infinite; }
+  .logo::before { content: ""; position: absolute; inset: 7px; border-radius: 50%; border: 3px dashed rgba(255, 255, 255, .7); }
+  .logo .spark { position: absolute; font-size: 26px; text-shadow: none; animation: twinkle 1.6s ease-in-out infinite; }
+  .logo .s1 { top: -10px; right: -12px; } .logo .s2 { bottom: 2px; left: -18px; font-size: 20px; animation-delay: -.8s; }
+  @keyframes logoBob { 50% { transform: translateY(-6px) rotate(-3deg); } }
+  @keyframes twinkle { 50% { transform: scale(.6) rotate(20deg); opacity: .6; } }
+  @media (prefers-reduced-motion: reduce) { .logo, .logo .spark { animation: none; } }
 
   .doors { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 22px; }
   .door {
@@ -41,6 +50,31 @@
   .door.soon .enter { background: #fff; color: var(--ink-2); border: 2.5px solid var(--ink); box-shadow: none; }
 
   .foot { margin-top: 34px; text-align: center; }
+
+  /* 推門動畫 */
+  a.door { position: relative; overflow: hidden; perspective: 900px; isolation: isolate; }
+  .door .glow, .door .leaf { position: absolute; pointer-events: none; opacity: 0; }
+  .door .glow { inset: 0; z-index: 2; transition: opacity .18s ease; display: grid; place-items: center; font-size: 56px;
+    background: radial-gradient(circle at 50% 45%, #fff 0%, #FFF4B8 35%, #FFD45C 70%, #F6A33A 100%); }
+  .door .glow span { animation: twinkle 1s ease-in-out infinite; }
+  .door .leaf { top: 0; bottom: 0; width: 50%; z-index: 3; background: inherit;
+    transition: transform .75s cubic-bezier(.55, .05, .3, 1), opacity .18s ease; backface-visibility: hidden; }
+  .door .leaf::before { content: ""; position: absolute; left: 16%; right: 16%; top: 22%; height: 26%; border: 3px solid var(--ink); border-radius: 14px; background: rgba(255, 255, 255, .28); }
+  .door .leaf::after { content: ""; position: absolute; left: 16%; right: 16%; top: 56%; height: 30%; border: 3px solid var(--ink); border-radius: 14px; background: rgba(255, 255, 255, .28); }
+  .door .leaf.l { left: 0; border-right: 3px solid var(--ink); transform-origin: 0 50%; }
+  .door .leaf.r { right: 0; border-left: 3px solid var(--ink); transform-origin: 100% 50%; }
+  .door .knob { position: absolute; top: 52%; width: 16px; height: 16px; border-radius: 50%; background: var(--lemon); border: 3px solid var(--ink); }
+  .door .leaf.l .knob { right: 10px; } .door .leaf.r .knob { left: 10px; }
+  a.door.opening { transform: none; box-shadow: 6px 6px 0 var(--ink); }
+  a.door.opening .glow, a.door.opening .leaf { opacity: 1; }
+  a.door.open .leaf.l { transform: rotateY(-108deg); }
+  a.door.open .leaf.r { transform: rotateY(108deg); }
+  a.door.open { animation: doorZoom .9s .3s ease-in forwards; z-index: 5; }
+  @keyframes doorZoom { to { transform: scale(1.12); } }
+  .flash { position: fixed; inset: 0; z-index: 100; pointer-events: none; opacity: 0;
+    background: radial-gradient(circle at var(--fx, 50%) var(--fy, 50%), #fff 0%, #FFF6C8 45%, #FFE07A 100%); }
+  body.entering .flash { animation: flashIn .45s .5s ease-in forwards; }
+  @keyframes flashIn { to { opacity: 1; } }
 </style>
 </head>
 <body>
@@ -53,7 +87,7 @@
 
 <main class="wrap">
   <section class="hero">
-    <div class="castle" aria-hidden="true">🏰</div>
+    <div class="logo" role="img" aria-label="安真魔法學院校徽：安">安<span class="spark s1" aria-hidden="true">⭐</span><span class="spark s2" aria-hidden="true">✨</span></div>
     <span class="l1">推開一扇門，就開始一場學習冒險！</span>
     <h1 class="tiles" aria-label="安真魔法學院"><b class="tile">安</b><b class="tile">真</b><b class="tile">魔</b><b class="tile">法</b><b class="tile">學</b><b class="tile">院</b></h1>
     <span class="pill l3">每天練一點點，魔力就多一點點 ✨</span>
@@ -95,6 +129,36 @@
 
   <p class="foot"><span class="pill">✦ 安真魔法學院 ✦</span></p>
 </main>
+<div class="flash" aria-hidden="true"></div>
+<script>
+  // 推門進去：兩片門板往內打開，透出金光，畫面亮起後進教室
+  (function () {
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var doors = document.querySelectorAll('a.door');
+    doors.forEach(function (a) {
+      var g = document.createElement('span'); g.className = 'glow'; g.setAttribute('aria-hidden', 'true'); g.innerHTML = '<span>✨</span>';
+      var l = document.createElement('span'); l.className = 'leaf l'; l.setAttribute('aria-hidden', 'true'); l.innerHTML = '<i class="knob"></i>';
+      var r = document.createElement('span'); r.className = 'leaf r'; r.setAttribute('aria-hidden', 'true'); r.innerHTML = '<i class="knob"></i>';
+      a.appendChild(g); a.appendChild(l); a.appendChild(r);
+      a.addEventListener('click', function (e) {
+        if (reduce || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+        e.preventDefault();
+        if (a.classList.contains('opening')) return;
+        var box = a.getBoundingClientRect();
+        document.documentElement.style.setProperty('--fx', (box.left + box.width / 2) + 'px');
+        document.documentElement.style.setProperty('--fy', (box.top + box.height / 2) + 'px');
+        a.classList.add('opening');
+        setTimeout(function () { a.classList.add('open'); document.body.classList.add('entering'); }, 230);
+        setTimeout(function () { location.href = a.href; }, 1280);
+      });
+    });
+    // 從教室按「上一頁」回來時，把門關好
+    window.addEventListener('pageshow', function () {
+      document.body.classList.remove('entering');
+      doors.forEach(function (a) { a.classList.remove('opening', 'open'); });
+    });
+  })();
+</script>
 <script src="assets/academy.js"></script>
 </body>
 </html>
