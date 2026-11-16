@@ -87,7 +87,9 @@
   /* 手寫格 */
   .pad-wrap { position: relative; width: min(300px, 78vw); aspect-ratio: 1; margin: 20px auto 0; border: var(--bd); border-radius: 18px; box-shadow: var(--sh); overflow: hidden;
     background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cg stroke='%23F0604D' stroke-opacity='.35' stroke-width='.6' stroke-dasharray='3 3' fill='none'%3E%3Cpath d='M50 0V100M0 50H100M0 0L100 100M100 0L0 100'/%3E%3C/g%3E%3C/svg%3E") center / 100% 100% no-repeat; }
+  .pad-wrap, .pad-wrap * { touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
   .pad-wrap canvas { display: block; width: 100%; height: 100%; touch-action: none; cursor: crosshair; }
+  html.writing, html.writing body { overscroll-behavior: none; }
   .pad-wrap .ph { position: absolute; inset: 0; display: grid; place-items: center; color: rgba(34,34,34,.28); font-weight: 900; pointer-events: none; }
   .pad-wrap.locked canvas { cursor: default; }
   .tool-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
@@ -562,7 +564,7 @@
   var t0 = 0;
   pad.addEventListener('pointerdown', function (e) {
     if (padLocked) return;
-    e.preventDefault(); pad.setPointerCapture(e.pointerId);
+    e.preventDefault(); lockScroll(); try { pad.setPointerCapture(e.pointerId); } catch (err) { /* 少數瀏覽器不支援 */ }
     if (!strokes.length) t0 = Date.now();
     var p = pt(e); cur = [[p[0]], [p[1]], [Date.now() - t0]]; strokes.push(cur);
     $('padPh').hidden = true; redraw();
@@ -571,7 +573,18 @@
     if (!cur) return;
     var p = pt(e); cur[0].push(p[0]); cur[1].push(p[1]); cur[2].push(Date.now() - t0); redraw();
   });
-  ['pointerup', 'pointercancel', 'pointerleave'].forEach(function (ev) { pad.addEventListener(ev, function () { cur = null; }); });
+  ['pointerup', 'pointercancel', 'pointerleave'].forEach(function (ev) { pad.addEventListener(ev, function () { cur = null; unlockScroll(); }); });
+  // 寫字時鎖住畫面：手寫格內的觸控一律不捲動頁面（iPhone Safari 需要在 touch 事件擋）
+  var padArea = $('padWrap');
+  ['touchstart', 'touchmove'].forEach(function (ev) {
+    padArea.addEventListener(ev, function (e) { if (e.cancelable) e.preventDefault(); lockScroll(); }, { passive: false });
+  });
+  ['touchend', 'touchcancel'].forEach(function (ev) { padArea.addEventListener(ev, unlockScroll); });
+  document.addEventListener('touchmove', function (e) {
+    if (document.documentElement.classList.contains('writing') && e.cancelable) e.preventDefault();
+  }, { passive: false });
+  function lockScroll() { document.documentElement.classList.add('writing'); }
+  function unlockScroll() { document.documentElement.classList.remove('writing'); }
   $('undoBtn').addEventListener('click', function () { strokes.pop(); if (!strokes.length) $('padPh').hidden = false; redraw(); });
   $('clearBtn').addEventListener('click', function () { strokes = []; $('padPh').hidden = false; redraw(); });
 
