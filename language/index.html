@@ -100,12 +100,17 @@
     border: var(--bd); border-radius: 16px; background: #fff; box-shadow: var(--sh); font-size: 2.2rem; font-weight: 900; letter-spacing: .06em; }
   .zy-input .ph { font-size: 1rem; color: var(--ink-2); letter-spacing: 0; }
   .zy-input .t1 { font-size: .85rem; background: #FFE1DC; border: 2px solid var(--ink); border-radius: 8px; padding: 0 6px; margin-left: 6px; letter-spacing: 0; }
-  .kb { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; max-width: 460px; margin: 16px auto 0; }
-  .kb.tones { grid-template-columns: repeat(5, 1fr); margin-top: 8px; }
-  .kb button { min-height: 44px; border: 2.5px solid var(--ink); border-radius: 10px; box-shadow: 2px 2px 0 var(--ink); font-size: 1.25rem; font-weight: 900; padding: 0; background: #fff; }
+  /* 大千式排列：與電腦鍵盤相同，每列錯位（以 1/4 鍵寬為單位） */
+  .kb { display: grid; grid-template-columns: repeat(45, 1fr); column-gap: 3px; row-gap: 6px; max-width: 560px; margin: 16px auto 0; }
+  .kb button { position: relative; grid-column: span 4; min-width: 0; min-height: 46px; border: 2px solid var(--ink); border-radius: 8px; box-shadow: 2px 2px 0 var(--ink); font-size: 1.15rem; font-weight: 900; padding: 8px 0 0; background: #fff; line-height: 1.1; }
+  .kb button small { position: absolute; top: 1px; left: 3px; font-size: .55rem; font-weight: 700; color: var(--ink-2); font-family: ui-monospace, Menlo, monospace; }
+  .kb .space { grid-column: 12 / span 22; font-size: .95rem; padding-top: 6px; }
+  .kb button.hit { transform: translate(2px, 2px); box-shadow: none; }
+  @media (min-width: 521px) { .kb button { font-size: 1.4rem; min-height: 52px; } .kb button small { font-size: .65rem; } }
+  @media (max-width: 420px) { .kb { margin-left: -12px; margin-right: -12px; column-gap: 2px; } }
   .kb button:active { transform: translate(2px, 2px); box-shadow: none; }
   .meta { scroll-margin-top: 72px; }
-  .kb .g1 { background: #FFF3C4; } .kb .g2 { background: #D3F0CB; } .kb .g3 { background: #DDF3FF; } .kb .g4 { background: #FFD9D2; font-size: 1.7rem; line-height: 1; } .kb .g4.first { font-size: 1rem; }
+  .kb .g1 { background: #FFF3C4; } .kb .g2 { background: #D3F0CB; } .kb .g3 { background: #DDF3FF; } .kb .g4 { background: #FFD9D2; font-size: 1.6rem; } .kb .g4.space { font-size: .95rem; }
 
   /* 自動批改結果 */
   .verdict { display: inline-block; margin-top: 18px; padding: 4px 18px; border: var(--bd); border-radius: 14px; box-shadow: var(--sh); font-weight: 900; font-size: 1.25rem; }
@@ -266,8 +271,7 @@
       <div id="kbZone" hidden>
         <div class="zy-input" id="zyInput" aria-live="polite"></div>
         <div id="kbKeys">
-          <div class="kb" id="kb" role="group" aria-label="注音符號鍵盤"></div>
-          <div class="kb tones" id="kbTones" role="group" aria-label="聲調"></div>
+          <div class="kb" id="kb" role="group" aria-label="注音鍵盤（大千式，與電腦鍵盤位置相同）"></div>
           <div class="tool-row">
             <button class="btn btn-ghost" id="kbBack" type="button">⌫ 刪除</button>
             <button class="btn btn-ghost" id="kbClear" type="button">🧽 清除</button>
@@ -507,6 +511,10 @@
         e.preventDefault();
         if (run.revealed) $('nextBtn').click(); else if (it.t === '形') $('submitPad').click(); else $('submitKb').click();
       } else if (e.key === 'Backspace' && !run.revealed && it.t === '音') { e.preventDefault(); kbBackspace(); }
+      else if (it.t === '音' && !run.revealed && KEYMAP[e.code] && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        e.preventDefault();
+        var kb = KEYMAP[e.code]; kb.click(); kb.classList.add('hit'); setTimeout(function () { kb.classList.remove('hit'); }, 120);
+      }
       return;
     }
     if ((e.key === ' ' || e.key === 'Enter') && !run.revealed) { e.preventDefault(); reveal(); }
@@ -620,20 +628,43 @@
   });
 
   // ---------- 字音：注音鍵盤 ----------
-  var SYMS = 'ㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙㄧㄨㄩㄚㄛㄜㄝㄞㄟㄠㄡㄢㄣㄤㄥㄦ'.split('');
-  var kbSyms = [], kbTone = '', kbToneSet = false;
-  SYMS.forEach(function (c, k) {
-    var b = document.createElement('button'); b.type = 'button'; b.textContent = c;
-    b.className = k < 21 ? 'g1' : k < 24 ? 'g2' : 'g3';
-    b.addEventListener('click', function () { if (!run || run.revealed) return; if (kbSyms.length < 4) kbSyms.push(c); kbShow(); });
-    $('kb').appendChild(b);
+  // 大千式：[按鍵代碼, 鍵帽字, 注音]
+  var KB_ROWS = [
+    [['Digit1','1','ㄅ'],['Digit2','2','ㄉ'],['Digit3','3','ˇ'],['Digit4','4','ˋ'],['Digit5','5','ㄓ'],['Digit6','6','ˊ'],['Digit7','7','˙'],['Digit8','8','ㄚ'],['Digit9','9','ㄞ'],['Digit0','0','ㄢ'],['Minus','-','ㄦ']],
+    [['KeyQ','Q','ㄆ'],['KeyW','W','ㄊ'],['KeyE','E','ㄍ'],['KeyR','R','ㄐ'],['KeyT','T','ㄔ'],['KeyY','Y','ㄗ'],['KeyU','U','ㄧ'],['KeyI','I','ㄛ'],['KeyO','O','ㄟ'],['KeyP','P','ㄣ']],
+    [['KeyA','A','ㄇ'],['KeyS','S','ㄋ'],['KeyD','D','ㄎ'],['KeyF','F','ㄑ'],['KeyG','G','ㄕ'],['KeyH','H','ㄘ'],['KeyJ','J','ㄨ'],['KeyK','K','ㄜ'],['KeyL','L','ㄠ'],['Semicolon',';','ㄤ']],
+    [['KeyZ','Z','ㄈ'],['KeyX','X','ㄌ'],['KeyC','C','ㄏ'],['KeyV','V','ㄒ'],['KeyB','B','ㄖ'],['KeyN','N','ㄙ'],['KeyM','M','ㄩ'],['Comma',',','ㄝ'],['Period','.','ㄡ'],['Slash','/','ㄥ']]
+  ];
+  var ROW_START = [1, 3, 4, 6];   // 每列起點（1/4 鍵寬），模擬實體鍵盤的錯位
+  var TONES = { 'ˊ': '二聲', 'ˇ': '三聲', 'ˋ': '四聲', '˙': '輕聲' };
+  var INITIALS = 'ㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙ', MEDIALS = 'ㄧㄨㄩ';
+  var kbSyms = [], kbTone = '', kbToneSet = false, KEYMAP = {};
+  function kbPress(v) {
+    if (!run || run.revealed) return;
+    if (v === '' || TONES[v]) { kbTone = v; kbToneSet = true; }
+    else if (kbSyms.length < 4) kbSyms.push(v);
+    kbShow();
+  }
+  KB_ROWS.forEach(function (row, ri) {
+    row.forEach(function (k, ci) {
+      var b = document.createElement('button'); b.type = 'button';
+      b.innerHTML = '<small>' + esc(k[1]) + '</small>' + esc(k[2]);
+      b.className = TONES[k[2]] ? 'g4' : INITIALS.indexOf(k[2]) >= 0 ? 'g1' : MEDIALS.indexOf(k[2]) >= 0 ? 'g2' : 'g3';
+      b.style.gridRow = String(ri + 1);
+      b.style.gridColumn = (ROW_START[ri] + ci * 4) + ' / span 4';
+      b.setAttribute('aria-label', (TONES[k[2]] || k[2]) + '（' + k[1] + ' 鍵）');
+      b.addEventListener('click', function () { kbPress(k[2]); });
+      KEYMAP[k[0]] = b;
+      $('kb').appendChild(b);
+    });
   });
-  [['一聲', ''], ['ˊ', 'ˊ'], ['ˇ', 'ˇ'], ['ˋ', 'ˋ'], ['˙', '˙']].forEach(function (t) {
-    var b = document.createElement('button'); b.type = 'button'; b.className = 'g4' + (t[0] === '一聲' ? ' first' : ''); b.textContent = t[0];
-    b.setAttribute('aria-label', t[0] === '一聲' ? '一聲' : t[0] === 'ˊ' ? '二聲' : t[0] === 'ˇ' ? '三聲' : t[0] === 'ˋ' ? '四聲' : '輕聲');
-    b.addEventListener('click', function () { if (!run || run.revealed) return; kbTone = t[1]; kbToneSet = true; kbShow(); });
-    $('kbTones').appendChild(b);
-  });
+  (function () {
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'g4 space';
+    b.innerHTML = '<small>空白鍵</small>一聲'; b.style.gridRow = '5';
+    b.setAttribute('aria-label', '一聲（空白鍵）');
+    b.addEventListener('click', function () { kbPress(''); });
+    KEYMAP.Space = b; $('kb').appendChild(b);
+  })();
   function kbValue() { return kbTone === '˙' ? '˙' + kbSyms.join('') : kbSyms.join('') + kbTone; }
   function kbShow() {
     var v = kbValue();
