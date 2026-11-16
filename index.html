@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>安真魔法學院</title>
+<meta name="description" content="安真魔法學院：音樂教室、語文教室，用闖關的方式複習。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chiron+GoRound+TC:wght@400;700;900&family=Huninn&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/academy.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏰</text></svg>">
+<style>
+  .hero { text-align: center; padding: 18px 0 26px; }
+  .hero .l1 { display: block; font-family: var(--hand); font-size: clamp(1.1rem, 3.8vw, 1.45rem); color: var(--ink-2); }
+  .hero h1 { margin: 12px 0 0; font-size: clamp(2.1rem, 9vw, 3.6rem); }
+  .hero .l3 { margin-top: 18px; background: var(--sky); font-family: var(--hand); font-weight: 400; font-size: 1.05rem; }
+  .hero .castle { font-size: 64px; line-height: 1; filter: drop-shadow(3px 3px 0 var(--ink)); }
+
+  .doors { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 22px; }
+  .door {
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+    padding: 30px 20px 22px; border-radius: 130px 130px 22px 22px;
+    border: var(--bd); box-shadow: 6px 6px 0 var(--ink); text-decoration: none; color: var(--ink);
+    transition: transform .12s, box-shadow .12s;
+  }
+  a.door:hover { transform: translate(-2px, -3px) rotate(-.6deg); box-shadow: 8px 9px 0 var(--ink); }
+  a.door:active { transform: translate(3px, 3px); box-shadow: 2px 2px 0 var(--ink); }
+  .door .icon { display: grid; place-items: center; width: 92px; height: 92px; border-radius: 50%; background: #fff; border: var(--bd); box-shadow: 3px 3px 0 var(--ink); font-size: 50px; line-height: 1; }
+  .door h2 { margin: 14px 0 2px; font-family: var(--hand); font-weight: 400; font-size: 1.9rem; }
+  .door .sub { display: inline-block; margin-top: 2px; background: #fff; border: 2.5px solid var(--ink); border-radius: 999px; padding: 0 12px; font-weight: 900; font-size: .95rem; }
+  .door ul { list-style: none; padding: 0; margin: 14px 0 18px; display: grid; gap: 6px; width: 100%; }
+  .door li { background: rgba(255, 255, 255, .75); border: 2px solid var(--ink); border-radius: 10px; padding: 3px 8px; font-weight: 700; font-size: .95rem; }
+  .door .enter { margin-top: auto; display: inline-flex; padding: 9px 22px; border-radius: 14px; background: var(--ink); color: #fff; font-weight: 900; box-shadow: 3px 3px 0 rgba(0,0,0,.25); }
+  .door.music { background: var(--lemon); }
+  .door.lang { background: var(--mint); }
+  .door.lang h2, .door.lang .enter { color: #fff; }
+  .door.lang h2 { text-shadow: -2px -2px 0 var(--ink), 2px -2px 0 var(--ink), -2px 2px 0 var(--ink), 2px 2px 0 var(--ink); }
+  .door.soon { background: var(--grape); }
+  .door.soon h2 { color: #fff; text-shadow: -2px -2px 0 var(--ink), 2px -2px 0 var(--ink), -2px 2px 0 var(--ink), 2px 2px 0 var(--ink); }
+  .door.soon .enter { background: #fff; color: var(--ink-2); border: 2.5px solid var(--ink); box-shadow: none; }
+
+  .foot { margin-top: 34px; text-align: center; }
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-in">
+  <a class="home" href="./"><span class="badge" aria-hidden="true">安</span>安真魔法學院</a>
+</div></header>
+
+<main class="wrap">
+  <section class="hero">
+    <div class="castle" aria-hidden="true">🏰</div>
+    <span class="l1">推開一扇門，就開始一場學習冒險！</span>
+    <h1 class="tiles" aria-label="安真魔法學院"><b class="tile">安</b><b class="tile">真</b><b class="tile">魔</b><b class="tile">法</b><b class="tile">學</b><b class="tile">院</b></h1>
+    <span class="pill l3">每天練一點點，魔力就多一點點 ✨</span>
+  </section>
+
+  <section class="doors" aria-label="教室">
+    <a class="door music" href="https://laierin615.github.io/romantic-music-ebook/">
+      <span class="icon" aria-hidden="true">🎻</span>
+      <h2>音樂教室</h2>
+      <span class="sub">浪漫樂派大冒險</span>
+      <ul>
+        <li>🐾 黑貓老師翻頁電子書</li>
+        <li>🎬 四格漫畫・🔔 鐘琴示範曲</li>
+        <li>📝 闖關小考・🧠 記憶翻牌</li>
+      </ul>
+      <span class="enter">推門進去 →</span>
+    </a>
+
+    <a class="door lang" href="language/">
+      <span class="icon" aria-hidden="true">📜</span>
+      <h2>語文教室</h2>
+      <span class="sub">字音字形咒語特訓</span>
+      <ul>
+        <li>🏆 全國語文競賽國小組歷屆題</li>
+        <li>🔤 字音・✍️ 字形翻牌練習</li>
+        <li>📕 錯題本自動收集</li>
+      </ul>
+      <span class="enter">推門進去 →</span>
+    </a>
+
+    <div class="door soon" aria-disabled="true">
+      <span class="icon" aria-hidden="true">🔮</span>
+      <h2>神祕教室</h2>
+      <span class="sub">籌備中</span>
+      <ul><li>下一間教室，敬請期待</li></ul>
+      <span class="enter">即將開放</span>
+    </div>
+  </section>
+
+  <p class="foot"><span class="pill">✦ 安真魔法學院 ✦</span></p>
+</main>
+</body>
+</html>

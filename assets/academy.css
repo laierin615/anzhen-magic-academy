@@ -1,0 +1,81 @@
+/* 安真魔法學院：共用樣式（與音樂教室同一套撞色漫畫風） */
+:root {
+  --ink: #222222;
+  --ink-2: #555555;
+  --paper: #FFFCF0;
+  --cream: #9ED9EC;
+  --dot: rgba(255, 255, 255, .6);
+  --pink: #F0604D;
+  --sky: #6CC3EE;
+  --orange: #F6A33A;
+  --mint: #5DBB4F;
+  --lemon: #F7D117;
+  --blue: #4FA3E0;
+  --grape: #8A8CF0;
+  --bd: 3px solid var(--ink);
+  --sh: 4px 4px 0 var(--ink);
+  --round: 'Chiron GoRound TC', 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+  --hand: 'Huninn', 'Chiron GoRound TC', sans-serif;
+  --kai: 'LXGW WenKai TC', 'BiauKai', 'DFKai-SB', 'Kaiti TC', serif;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+html, body { margin: 0; }
+body {
+  min-height: 100vh;
+  font-family: var(--round);
+  color: var(--ink);
+  background-color: var(--cream);
+  background-image: radial-gradient(var(--dot) 1.3px, transparent 1.6px);
+  background-size: 18px 18px;
+  font-size: 17px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+a { color: inherit; }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px dashed var(--ink); outline-offset: 3px; }
+.hand { font-family: var(--hand); font-weight: 400; }
+
+/* 頂部列 */
+.topbar { position: sticky; top: 0; z-index: 50; background: var(--lemon); border-bottom: var(--bd); }
+.topbar-in { max-width: 960px; margin: 0 auto; display: flex; align-items: center; gap: 10px; padding: 8px 16px; }
+.topbar .home { display: inline-flex; align-items: center; gap: 8px; flex: 1; min-width: 0; text-decoration: none; font-family: var(--hand); font-size: 1.15rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.badge { display: inline-grid; place-items: center; flex: 0 0 auto; width: 36px; height: 36px; border-radius: 50%; background: var(--pink); color: #fff; border: var(--bd); box-shadow: 2px 2px 0 var(--ink); font-family: var(--hand); font-size: 1.1rem; }
+
+.wrap { max-width: 960px; margin: 0 auto; padding: 20px 16px 56px; }
+
+/* 色塊標題字 */
+.tiles { display: flex; justify-content: center; flex-wrap: wrap; gap: 4px; font-family: var(--hand); font-weight: 400; line-height: 1; }
+.tile { display: grid; place-items: center; width: 1.45em; height: 1.45em; border: 3px solid var(--ink); box-shadow: 3px 3px 0 var(--ink); animation: tileBob 2.4s ease-in-out infinite; }
+.tile:nth-child(5n+1) { background: #333; color: #fff; transform: rotate(-4deg); }
+.tile:nth-child(5n+2) { background: var(--lemon); transform: rotate(3deg) translateY(6px); }
+.tile:nth-child(5n+3) { background: var(--pink); color: #fff; transform: rotate(-2deg); }
+.tile:nth-child(5n+4) { background: var(--sky); transform: rotate(4deg) translateY(-4px); }
+.tile:nth-child(5n) { background: var(--mint); color: #fff; transform: rotate(-3deg) translateY(4px); }
+.tile:nth-child(odd) { animation-delay: -1.2s; }
+@keyframes tileBob { 50% { translate: 0 -4px; } }
+@media (prefers-reduced-motion: reduce) { .tile { animation: none; } }
+
+.pill { display: inline-block; background: #fff; border: 2.5px solid var(--ink); border-radius: 999px; padding: 2px 14px; font-weight: 700; box-shadow: 3px 3px 0 var(--ink); }
+
+/* 按鈕 */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-height: 48px; padding: 11px 22px; border-radius: 16px; border: var(--bd); box-shadow: var(--sh);
+  font-weight: 900; font-size: 1.05rem; text-decoration: none; color: var(--ink); background: #fff;
+  transition: transform .1s, box-shadow .1s;
+}
+.btn:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 var(--ink); }
+.btn:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--ink); }
+.btn-gold { background: var(--pink); color: #fff; }
+.btn-ghost { background: #fff; }
+.btn-right { background: var(--mint); color: #fff; }
+.btn-wrong { background: var(--orange); }
+.btn:disabled { opacity: .45; cursor: not-allowed; transform: none; box-shadow: var(--sh); }
+
+/* 紙卡 */
+.panel { background: var(--paper); border: var(--bd); border-radius: 20px; box-shadow: 6px 6px 0 var(--ink); padding: 22px 18px; }
+.panel + .panel { margin-top: 18px; }
