@@ -79,3 +79,17 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px dashed
 /* 紙卡 */
 .panel { background: var(--paper); border: var(--bd); border-radius: 20px; box-shadow: 6px 6px 0 var(--ink); padding: 22px 18px; }
 .panel + .panel { margin-top: 18px; }
+
+/* 頂部列按鈕：回大廳、更新 */
+.tb-actions { display: flex; gap: 8px; align-items: center; flex: 0 0 auto; }
+.tb-btn { display: inline-flex; align-items: center; gap: 4px; min-height: 40px; padding: 4px 12px; border-radius: 999px; border: 2.5px solid var(--ink); background: var(--paper); box-shadow: 2px 2px 0 var(--ink); font-weight: 900; font-size: .92rem; text-decoration: none; color: var(--ink); white-space: nowrap; }
+.tb-btn:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--ink); }
+.tb-btn.home-btn { background: var(--sky); }
+.tb-btn.spin .ico { display: inline-block; animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (max-width: 460px) {
+  .topbar.compact .home .txt { display: none; }
+  .tb-btn { padding: 4px 9px; font-size: .88rem; }
+  .tb-actions { gap: 6px; }
+}
+.back-hall { display: flex; justify-content: center; margin-top: 22px; }

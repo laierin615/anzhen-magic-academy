@@ -114,10 +114,14 @@
   }
 </style>
 </head>
-<body>
-<header class="topbar"><div class="topbar-in">
-  <a class="home" href="../"><span class="badge" aria-hidden="true">安</span>安真魔法學院</a>
-  <button class="btn btn-ghost" id="toBank" type="button" style="min-height:40px;padding:4px 14px;font-size:.95rem">📚 題庫</button>
+<body data-refresh="data/bank.json">
+<header class="topbar compact"><div class="topbar-in">
+  <a class="home" href="../"><span class="badge" aria-hidden="true">安</span><span class="txt">安真魔法學院</span></a>
+  <div class="tb-actions">
+    <a class="tb-btn home-btn" href="../" aria-label="回到魔法學院大廳">🏰 回大廳</a>
+    <button class="tb-btn" id="refreshBtn" type="button" aria-label="更新網頁到最新版"><span class="ico">🔄</span><span class="lbl-long">更新</span></button>
+    <button class="tb-btn" id="toBank" type="button">📚 題庫</button>
+  </div>
 </div></header>
 
 <main class="wrap">
@@ -259,9 +263,11 @@
     </div>
   </section>
 
+  <div class="back-hall"><a class="btn btn-ghost" href="../">🏰 回魔法學院大廳</a></div>
+
   <p class="source">題目來源：教育部全國語文競賽國小學生組國語字音字形決賽試題與公布答案（102–112 年），答案以當年公布為準。少數卷面讀音和辭典不同的題目，翻牌時會另外提醒。發現轉錄錯字，請告訴老師。</p>
 </main>
-
+<script src="../assets/academy.js"></script>
 <script>
 (function () {
   'use strict';
