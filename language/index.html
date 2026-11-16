@@ -51,7 +51,7 @@
   .chip { min-height: 44px; padding: 6px 15px; border-radius: 999px; border: 2.5px solid var(--ink); background: #fff; font-weight: 900; font-size: 1rem; box-shadow: 2px 2px 0 var(--ink); }
   .chip small { font-weight: 700; opacity: .75; }
   .chip[aria-pressed="true"] { background: var(--c, var(--sky)); }
-  #typeChips .chip:nth-child(1) { --c: var(--lemon); } #typeChips .chip:nth-child(2) { --c: var(--mint); } #typeChips .chip:nth-child(3) { --c: var(--orange); }
+  #typeChips .chip:nth-child(1) { --c: var(--lemon); } #typeChips .chip:nth-child(2) { --c: var(--mint); } #typeChips .chip:nth-child(3) { --c: var(--orange); } #typeChips .chip:nth-child(4) { --c: #FFB3A8; }
   #yearChips { --c: var(--sky); } #countChips { --c: #FFB3A8; } #orderChips { --c: #C9CAFF; }
   .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 6px; }
   .hint { font-size: .9rem; color: var(--ink-2); margin: 12px 0 0; font-weight: 700; }
@@ -143,6 +143,55 @@
   .muted { color: var(--ink-2); font-size: .9rem; font-weight: 700; margin: 10px 0 0; }
 
   .source { margin-top: 26px; font-size: .82rem; color: var(--ink-2); background: rgba(255,255,255,.75); border: 2px solid var(--ink); border-radius: 12px; padding: 8px 12px; }
+  /* 模擬賽 */
+  .rule { margin: 0 0 16px; padding: 8px 12px; background: #fff; border: 2px dashed var(--ink); border-radius: 12px; font-size: .92rem; font-weight: 700; line-height: 1.6; }
+  #mkPaper { --c: var(--orange); } #mkYears { --c: var(--sky); } #mkSize { --c: #FFB3A8; } #mkPace { --c: var(--lemon); }
+  .mk-hist { margin-top: 16px; font-size: .9rem; font-weight: 700; }
+  .mk-hist ul { list-style: none; padding: 0; margin: 6px 0 0; display: grid; gap: 4px; }
+  .mk-hist li { background: #fff; border: 2px solid var(--ink); border-radius: 10px; padding: 2px 10px; display: flex; justify-content: space-between; gap: 8px; }
+  .mk-hist li b { white-space: nowrap; }
+  .ex-bar { position: sticky; top: 58px; z-index: 40; display: flex; align-items: center; gap: 12px; margin-bottom: 14px; padding: 8px 10px; background: #fff; border: var(--bd); border-radius: 16px; box-shadow: var(--sh); }
+  .ex-time { flex: 0 0 auto; min-width: 4.3em; text-align: center; font-family: var(--hand); font-size: 1.9rem; line-height: 1.3; background: var(--sky); border: 2.5px solid var(--ink); border-radius: 12px; font-variant-numeric: tabular-nums; }
+  .ex-time.warn { background: var(--pink); color: #fff; animation: exPulse 1s ease-in-out infinite; }
+  @keyframes exPulse { 50% { transform: scale(1.07); } }
+  .ex-prog { flex: 1; min-width: 0; font-weight: 900; font-size: .9rem; }
+  .ex-prog .bar { height: 12px; margin: 4px 0 0; }
+  .ex-submit { flex: 0 0 auto; max-width: 9.5em; min-height: 46px; padding: 6px 14px; font-size: .95rem; line-height: 1.25; }
+  .ex-card { scroll-margin-top: 140px; }
+  .ex-nav { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+  .ex-nav .btn { min-height: 48px; padding: 8px 16px; }
+  .ex-card .word { font-size: clamp(44px, 12vw, 80px); }
+  @media (max-width: 520px) {
+    .ex-card { padding-top: 14px; }
+    .ex-card .ask { font-size: .9rem; margin-bottom: 10px; }
+    .ex-nav { gap: 6px; margin-top: 12px; flex-wrap: nowrap; }
+    .ex-nav .btn { min-height: 44px; padding: 6px 10px; font-size: .92rem; flex: 1; }
+    .ex-card .zy-input { margin-top: 12px; min-height: 54px; }
+    .ex-card .pad-wrap { margin-top: 12px; }
+    .ex-time { font-size: 1.6rem; }
+  }
+  .ex-sheet h3 { margin: 0 0 8px; font-size: 1rem; }
+  .ex-sheet h3 + .sheet-grid { margin-bottom: 16px; }
+  .sheet-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(42px, 1fr)); gap: 6px; }
+  .sheet-grid button { min-height: 40px; border: 2px solid var(--ink); border-radius: 8px; background: #fff; font-weight: 900; font-size: .9rem; padding: 0; }
+  .sheet-grid button.done { background: var(--mint); color: #fff; }
+  .sheet-grid button.cur { outline: 3px solid var(--pink); outline-offset: 1px; }
+  .ex-count { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; background: rgba(255, 246, 222, .94); }
+  .ex-count b { font-family: var(--hand); font-weight: 400; font-size: clamp(90px, 30vw, 170px); color: var(--pink); -webkit-text-stroke: 4px var(--ink); paint-order: stroke fill; animation: exPop .7s ease; }
+  .ex-count b.go { font-size: clamp(60px, 18vw, 110px); color: var(--mint); }
+  @keyframes exPop { from { transform: scale(.4); opacity: 0; } 60% { transform: scale(1.1); opacity: 1; } }
+  body.exam-mode #hintBtn, body.exam-mode #submitPad, body.exam-mode #submitKb, body.exam-mode .back-hall, body.exam-mode #toBank { display: none !important; }
+  .mr-break { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 12px 0 4px; }
+  .mr-break span { background: #fff; border: 2.5px solid var(--ink); border-radius: 999px; padding: 2px 12px; font-weight: 900; box-shadow: 2px 2px 0 var(--ink); }
+  .mr-break span.y { background: var(--lemon); } .mr-break span.x { background: var(--mint); color: #fff; }
+  .wrong-list.mk { grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); }
+  .wrong-list.mk li { position: relative; font-size: .88rem; line-height: 1.5; }
+  .wrong-list.mk li.fixed { background: #E6F7E2; }
+  .wrong-list.mk li .ink { float: right; width: 52px; height: 52px; margin: 0 0 4px 6px; background: #fff; border: 2px solid var(--ink); border-radius: 8px; }
+  .wrong-list.mk li .t { display: inline-block; font-size: .75rem; border: 1.5px solid var(--ink); border-radius: 6px; padding: 0 5px; margin-right: 4px; background: var(--lemon); }
+  .wrong-list.mk li .t.x { background: var(--mint); color: #fff; }
+  .mini { display: inline-block; margin-top: 4px; font: inherit; font-size: .8rem; font-weight: 900; border: 2px solid var(--ink); border-radius: 999px; padding: 1px 9px; background: var(--lemon); }
+  .stars-row:empty { display: none; }
   [hidden] { display: none !important; }
 
   @media (max-width: 520px) {
@@ -220,8 +269,10 @@
           <button class="chip" type="button" data-v="音" aria-pressed="true">🔤 字音 <small>看字寫注音</small></button>
           <button class="chip" type="button" data-v="形" aria-pressed="false">✍️ 字形 <small>看注音寫國字</small></button>
           <button class="chip" type="button" data-v="混" aria-pressed="false">🎲 混合</button>
+          <button class="chip" type="button" data-v="模" aria-pressed="false">🏆 模擬賽 <small>比照正式比賽計時</small></button>
         </div>
       </div>
+      <div id="practiceFields">
       <div class="field">
         <span class="label">年度（可複選）</span>
         <div class="chips" id="yearChips" role="group" aria-label="年度"></div>
@@ -249,13 +300,89 @@
           <button class="chip" type="button" data-v="self" aria-pressed="false">📝 紙上寫 <small>翻牌自己對</small></button>
         </div>
       </div>
+      </div>
+      <div id="mockFields" hidden>
+        <p class="rule">正式比賽：字音 100 字＋字形 100 字，共 200 字，限時 10 分鐘，每字 0.5 分，滿分 100 分。<br>模擬賽也一樣：中間不對答案，可以跳題、回頭改，時間到或交卷後才一起批改。</p>
+        <div class="field">
+          <span class="label">考卷</span>
+          <div class="chips" id="mkPaper" role="group" aria-label="考卷">
+            <button class="chip" type="button" data-v="rand" aria-pressed="true">🎲 隨機組卷 <small>每次不一樣</small></button>
+            <button class="chip" type="button" data-v="past" aria-pressed="false">📜 歷屆原卷 <small>照原題序</small></button>
+          </div>
+        </div>
+        <div class="field" id="mkYearField" hidden>
+          <span class="label">哪一年的考卷</span>
+          <div class="chips" id="mkYears" role="group" aria-label="原卷年度"></div>
+        </div>
+        <div class="field" id="mkSizeField">
+          <span class="label">份量</span>
+          <div class="chips" id="mkSize" role="group" aria-label="份量">
+            <button class="chip" type="button" data-v="full" aria-pressed="true">完整卷 <small>200 題</small></button>
+            <button class="chip" type="button" data-v="half" aria-pressed="false">半卷 <small>100 題</small></button>
+            <button class="chip" type="button" data-v="mini" aria-pressed="false">迷你卷 <small>40 題</small></button>
+          </div>
+        </div>
+        <div class="field">
+          <span class="label">計時</span>
+          <div class="chips" id="mkPace" role="group" aria-label="計時">
+            <button class="chip" type="button" data-v="online" aria-pressed="true">🐢 線上節奏 <small>每字 9 秒</small></button>
+            <button class="chip" type="button" data-v="official" aria-pressed="false">⚡ 正式節奏 <small>每字 3 秒</small></button>
+          </div>
+        </div>
+        <p class="hint" id="mkInfo"></p>
+        <div class="mk-hist" id="mkHist"></div>
+      </div>
       <div class="actions">
         <button class="btn btn-gold" id="startBtn" type="button">✨ 開始練習</button>
         <button class="btn btn-ghost" id="wrongBtn" type="button">📕 複習錯題本</button>
       </div>
       <p class="hint" id="poolHint"></p>
     </div>
+
   </section>
+
+  <!-- 模擬賽作答 -->
+  <section id="exam" hidden>
+    <div class="ex-bar">
+      <div class="ex-time" id="exTime" role="timer" aria-label="剩餘時間">--:--</div>
+      <div class="ex-prog"><span id="exDone"></span><div class="bar"><i id="exFill"></i></div></div>
+      <button class="btn btn-gold ex-submit" id="exSubmit" type="button">📮 交卷</button>
+    </div>
+    <div class="panel card ex-card" id="exCard">
+      <div class="meta"><span id="exPos"></span><span id="exTag"></span></div>
+      <p class="ask" id="exAsk" style="margin-top:12px"></p>
+      <div class="word" id="exWord"></div>
+      <div class="ex-nav">
+        <button class="btn btn-ghost" id="exPrev" type="button">◀ 上一題</button>
+        <button class="btn btn-ghost" id="exGrid" type="button" aria-expanded="false">📋 題號表</button>
+        <button class="btn btn-gold" id="exNext" type="button">下一題 ▶</button>
+      </div>
+      <div id="exInput"></div>
+    </div>
+    <div class="panel ex-sheet" id="exSheet" hidden></div>
+    <p class="keys">電腦鍵盤：字音直接打注音，Enter 下一題</p>
+    <div class="actions" style="justify-content:center">
+      <button class="btn btn-ghost" id="exQuit" type="button">放棄這次模擬賽</button>
+    </div>
+  </section>
+
+  <!-- 模擬賽成績 -->
+  <section id="mockResult" hidden>
+    <div class="panel result">
+      <h2>✦ 模擬賽成績</h2>
+      <p class="muted" id="mrLabel" style="margin:0"></p>
+      <div class="big" id="mrScore"></div>
+      <div class="mr-break" id="mrBreak"></div>
+      <p class="muted" id="mrNote"></p>
+      <div id="mrWrong"></div>
+      <div class="actions" style="justify-content:center;margin-top:18px" id="mrActions">
+        <button class="btn btn-gold" id="mrPractice" type="button">📕 練錯的字</button>
+        <button class="btn btn-ghost" id="mrAgain" type="button">🔁 再考一次</button>
+        <button class="btn btn-ghost" id="mrBack" type="button">回選單</button>
+      </div>
+    </div>
+  </section>
+  <div class="ex-count" id="exCount" hidden aria-live="assertive"><b></b></div>
 
   <!-- 練習 -->
   <section id="quiz" hidden>
@@ -352,7 +479,7 @@
   function loadRec() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } }
   function saveRec() { try { localStorage.setItem(KEY, JSON.stringify(rec)); } catch (e) { /* 無痕模式：不保存 */ } }
   var $ = function (id) { return document.getElementById(id); };
-  function show(id) { ['menu', 'quiz', 'result', 'bank'].forEach(function (x) { $(x).hidden = x !== id; }); window.scrollTo(0, 0); }
+  function show(id) { ['menu', 'quiz', 'result', 'bank', 'exam', 'mockResult'].forEach(function (x) { $(x).hidden = x !== id; }); window.scrollTo(0, 0); }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
   function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
@@ -402,6 +529,7 @@
     });
     refreshMenu();
     renderBank('');
+    mkInit(years);
   }).catch(function () { $('poolHint').textContent = '題庫載入失敗，請重新整理頁面。'; });
 
   // ---------- 選單 ----------
@@ -417,7 +545,7 @@
   $('modeChips').querySelectorAll('.chip').forEach(function (x) { x.setAttribute('aria-pressed', x.dataset.v === opt.mode ? 'true' : 'false'); });
   $('modeChips').addEventListener('click', function () { try { localStorage.setItem('anzhen-zyzx-mode', opt.mode); } catch (e) {} });
 
-  function pool() { return BANK.filter(function (b) { return opt.years.indexOf(b.y) >= 0 && (opt.type === '混' || b.t === opt.type); }); }
+  function pool() { return BANK.filter(function (b) { return opt.years.indexOf(b.y) >= 0 && (opt.type === '混' || opt.type === '模' || b.t === opt.type); }); }
   function refreshMenu() {
     var yin = BANK.filter(function (b) { return b.t === '音'; }).length;
     $('sTotal').textContent = BANK.length;
@@ -426,12 +554,16 @@
     $('sWrong').textContent = w;
     $('wrongBtn').disabled = w === 0;
     $('wrongBtn').textContent = '📕 複習錯題本（' + w + '）';
+    var mock = opt.type === '模';
+    $('practiceFields').hidden = mock; $('mockFields').hidden = !mock;
+    $('poolHint').hidden = mock; $('startBtn').textContent = mock ? '🏁 開始模擬賽' : '✨ 開始練習';
     var p = pool().length;
     $('poolHint').textContent = '目前範圍共 ' + p + ' 題（題庫：字音 ' + yin + '、字形 ' + (BANK.length - yin) + '）';
     $('startBtn').disabled = p === 0;
   }
 
   $('startBtn').addEventListener('click', function () {
+    if (opt.type === '模') { mkGo(); return; }
     var list = pool();
     if (opt.order === 'rand') shuffle(list); else list.sort(function (a, b) { return b.y - a.y || (a.t === b.t ? 0 : a.t === '音' ? -1 : 1) || a.n - b.n; });
     if (opt.count) list = list.slice(0, opt.count);
@@ -509,6 +641,7 @@
   $('wrongJudgeBtn').addEventListener('click', function () { judge(false); });
   $('quitBtn').addEventListener('click', function () { run = null; refreshMenu(); say('休息一下也很好！想練的時候再來找我。'); show('menu'); });
   document.addEventListener('keydown', function (e) {
+    if (!$('exam').hidden) { exKey(e); return; }
     if ($('quiz').hidden || !run || e.target.tagName === 'INPUT') return;
     if (opt.mode === 'auto') {
       var it = run.list[run.pos];
@@ -579,7 +712,7 @@
   function pt(e) { var r = pad.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; }
   var t0 = 0;
   pad.addEventListener('pointerdown', function (e) {
-    if (padLocked) return;
+    if (padLocked || (ex && (!ex.ready || ex.over))) return;
     e.preventDefault(); lockScroll(); try { pad.setPointerCapture(e.pointerId); } catch (err) { /* 少數瀏覽器不支援 */ }
     if (!strokes.length) t0 = Date.now();
     var p = pt(e); cur = [[p[0]], [p[1]], [Date.now() - t0]]; strokes.push(cur);
@@ -662,7 +795,7 @@
   var INITIALS = 'ㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙ', MEDIALS = 'ㄧㄨㄩ';
   var kbSyms = [], kbTone = '', kbToneSet = false, KEYMAP = {};
   function kbPress(v) {
-    if (!run || run.revealed) return;
+    if (ex ? (!ex.ready || ex.over) : (!run || run.revealed)) return;
     if (v === '' || TONES[v]) { kbTone = v; kbToneSet = true; }
     else if (kbSyms.length < 4) kbSyms.push(v);
     kbShow();
@@ -724,6 +857,346 @@
   }
   $('againWrongBtn').addEventListener('click', function () { start(shuffle(run.wrongs.slice()), '再練一次剛剛錯的字，這次一定行！'); });
   $('backMenuBtn').addEventListener('click', function () { refreshMenu(); say('想再挑戰哪一種咒語呢？'); show('menu'); });
+
+  // ---------- 模擬賽（比照全國語文競賽：字音、字形各 100 字，10 分鐘，每字 0.5 分） ----------
+  var MK_KEY = 'anzhen-zyzx-mock-v1';
+  var PACE = { online: 9, official: 3 };          // 每字秒數；正式 200 字 10 分鐘＝每字 3 秒
+  var PER = { full: 100, half: 50, mini: 20 };     // 隨機組卷：字音、字形各幾題
+  var SIZE_NAME = { full: '完整卷', half: '半卷', mini: '迷你卷' };
+  var mk = { paper: 'rand', year: 0, size: 'full', pace: 'online' };
+  var ex = null;
+  function mkHist() { try { return JSON.parse(localStorage.getItem(MK_KEY)) || []; } catch (e) { return []; } }
+  function mkSaveHist(h) { try { localStorage.setItem(MK_KEY, JSON.stringify(h.slice(-40))); } catch (e) { /* 無痕模式 */ } }
+  function mmss(t) { t = Math.max(0, Math.round(t)); return Math.floor(t / 60) + ':' + ('0' + t % 60).slice(-2); }
+
+  function mkInit(years) {
+    mk.year = years[0];
+    $('mkYears').innerHTML = years.map(function (y, k) { return '<button class="chip" type="button" data-v="' + y + '" aria-pressed="' + (k ? 'false' : 'true') + '">' + y + ' 年</button>'; }).join('');
+    [['mkPaper', 'paper'], ['mkYears', 'year', Number], ['mkSize', 'size'], ['mkPace', 'pace']].forEach(function (g) {
+      $(g[0]).addEventListener('click', function (e) {
+        var b = e.target.closest('.chip'); if (!b) return;
+        $(g[0]).querySelectorAll('.chip').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+        mk[g[1]] = g[2] ? g[2](b.dataset.v) : b.dataset.v;
+        mkRefresh();
+      });
+    });
+    mkRefresh();
+  }
+  function mkList() {
+    if (mk.paper === 'past') {
+      return BANK.filter(function (b) { return b.y === mk.year; }).sort(function (a, b) { return (a.t === b.t ? 0 : a.t === '音' ? -1 : 1) || a.n - b.n; });
+    }
+    var seen = {}, out = [];
+    ['音', '形'].forEach(function (t) {
+      var got = 0;
+      shuffle(BANK.filter(function (b) { return b.t === t; })).forEach(function (b) {
+        var k = t + b.w + b.i;
+        if (got >= PER[mk.size] || seen[k]) return;
+        seen[k] = 1; out.push(b); got++;
+      });
+    });
+    return out;
+  }
+  function mkRefresh() {
+    $('mkYearField').hidden = mk.paper !== 'past';
+    $('mkSizeField').hidden = mk.paper === 'past';
+    var n, ny;
+    if (mk.paper === 'past') { var l = mkList(); n = l.length; ny = l.filter(function (b) { return b.t === '音'; }).length; }
+    else { ny = PER[mk.size]; n = ny * 2; }
+    $('mkInfo').textContent = '字音 ' + ny + '＋字形 ' + (n - ny) + '，共 ' + n + ' 題，限時 ' + mmss(n * PACE[mk.pace]) +
+      (mk.paper === 'past' && n < 200 ? '（這年有幾題沒收錄，分數照比例換算）' : '') +
+      (mk.pace === 'official' ? '。正式節奏很快，先練熟再挑戰！' : '');
+    var h = mkHist();
+    if (!h.length) { $('mkHist').innerHTML = ''; return; }
+    var best = h.reduce(function (m, r) { return r.s > m.s ? r : m; });
+    $('mkHist').innerHTML = '🏅 最佳成績：' + best.s + ' 分（' + esc(best.lab) + '）<ul>' + h.slice(-5).reverse().map(function (r) {
+      return '<li><span>' + esc(r.d) + '　' + esc(r.lab) + '</span><b>' + r.s + ' 分</b></li>';
+    }).join('') + '</ul>';
+  }
+
+  // 開始
+  function exGuard(e) { e.preventDefault(); e.returnValue = ''; }
+  function mkGo() {
+    var list = mkList(); if (!list.length) return;
+    var past = mk.paper === 'past', cy = 0, cx = 0;
+    run = null;
+    ex = {
+      list: list, ans: new Array(list.length), pend: {}, pos: 0, ready: false, over: false,
+      secs: list.length * PACE[mk.pace], pace: mk.pace,
+      lab: (past ? mk.year + ' 年原卷' : '隨機' + SIZE_NAME[mk.size]) + (mk.pace === 'official' ? '・正式節奏' : ''),
+      no: list.map(function (it) { return past ? it.n : it.t === '音' ? ++cy : ++cx; })
+    };
+    document.body.classList.add('exam-mode');
+    $('exInput').appendChild($('padZone')); $('exInput').appendChild($('kbZone'));
+    $('exSheet').hidden = true; $('exGrid').setAttribute('aria-expanded', 'false');
+    $('exSubmit').textContent = '📮 交卷'; $('exTime').classList.remove('warn');
+    $('exTime').textContent = mmss(ex.secs);
+    buildSheet();
+    show('exam'); exRender();
+    window.addEventListener('beforeunload', exGuard);
+    say('模擬賽開始囉！跟正式比賽一樣，中間不對答案，寫完再一起批改。不會的先跳過！', 'happy');
+    var steps = ['3', '2', '1', '開始！'], k = 0, box = $('exCount');
+    box.hidden = false;
+    (function next() {
+      if (!ex) { box.hidden = true; return; }
+      if (k >= steps.length) {
+        box.hidden = true; ex.ready = true; ex.start = Date.now(); ex.end = ex.start + ex.secs * 1000;
+        tick(); ex.timer = setInterval(tick, 250); return;
+      }
+      box.innerHTML = '<b class="' + (k === 3 ? 'go' : '') + '">' + steps[k] + '</b>';
+      Sfx(k === 3 ? 880 : 520); k++; setTimeout(next, 750);
+    })();
+  }
+  function Sfx(f) {
+    try {
+      var A = window.AudioContext || window.webkitAudioContext; if (!A) return;
+      Sfx.c = Sfx.c || new A(); var c = Sfx.c, o = c.createOscillator(), g = c.createGain();
+      o.frequency.value = f; o.connect(g); g.connect(c.destination);
+      g.gain.setValueAtTime(.18, c.currentTime); g.gain.exponentialRampToValueAtTime(.001, c.currentTime + .35);
+      o.start(); o.stop(c.currentTime + .36);
+    } catch (e) { /* 沒有聲音也沒關係 */ }
+  }
+  function tick() {
+    if (!ex || ex.over) return;
+    var left = Math.max(0, Math.ceil((ex.end - Date.now()) / 1000));
+    $('exTime').textContent = mmss(left);
+    $('exTime').classList.toggle('warn', left <= 60);
+    if (left <= 60 && !ex.warned && ex.secs > 120) { ex.warned = true; Sfx(660); say('剩下 1 分鐘！先把會寫的寫完！', 'think'); }
+    if (left === 0) { Sfx(330); say('時間到，停筆！毛毛老師來批改。', 'think'); exEnd(true); }
+  }
+
+  // 題目畫面
+  function exRender() {
+    var k = ex.pos, it = ex.list[k], a = ex.ans[k];
+    $('exPos').textContent = '第 ' + (k + 1) + ' / ' + ex.list.length + ' 題';
+    $('exTag').innerHTML = '<span class="tag ' + (it.t === '音' ? 'yin' : 'xing') + '">字' + it.t + ' 第 ' + ex.no[k] + ' 題</span>';
+    $('exAsk').textContent = it.t === '音' ? '🔤 黃色格子的字怎麼念？點注音拼出來' : '✍️ 框框裡的注音是哪個字？寫在格子裡';
+    $('exWord').innerHTML = wordHtml(it, false);
+    $('exWord').setAttribute('aria-label', it.t === '音' ? '語詞：' + it.w + '，考第 ' + (it.i + 1) + ' 個字' : '語詞中有一個字以注音 ' + it.z + ' 表示');
+    $('padZone').hidden = it.t !== '形'; $('kbZone').hidden = it.t !== '音';
+    if (it.t === '音') {
+      kbReset();
+      if (a) { kbSyms = a.syms.slice(); kbTone = a.tone; kbToneSet = a.toneSet; kbShow(); }
+    } else {
+      padReset();
+      if (a) requestAnimationFrame(function () {
+        if (!ex || ex.pos !== k) return;
+        var f = padSize / a.size;
+        strokes = a.strokes.map(function (s) { return [s[0].map(function (x) { return x * f; }), s[1].map(function (y) { return y * f; }), s[2].slice()]; });
+        $('padPh').hidden = true; redraw();
+      });
+    }
+    $('exPrev').disabled = k === 0;
+    $('exNext').textContent = k === ex.list.length - 1 ? '📋 看題號表' : '下一題 ▶';
+    exProgress();
+    $('exCard').scrollIntoView({ block: 'start', behavior: 'auto' });
+  }
+  function exSave() {
+    if (!ex) return;
+    var k = ex.pos, it = ex.list[k];
+    if (it.t === '音') {
+      ex.ans[k] = kbSyms.length ? { v: kbValue(), syms: kbSyms.slice(), tone: kbTone, toneSet: kbToneSet } : undefined;
+      return;
+    }
+    if (!strokes.length) { ex.ans[k] = undefined; return; }
+    var sig = JSON.stringify(strokes), old = ex.ans[k];
+    if (old && old.sig === sig) return;
+    var a = { strokes: JSON.parse(sig), size: padSize, sig: sig, st: 'wait', c: [] };
+    ex.ans[k] = a; exRecog(k, a);
+  }
+  // 手寫辨識在背景進行，不耽誤作答時間
+  function exRecog(k, a) {
+    a.st = 'wait';
+    var p = recognize(a.strokes, Math.round(a.size)).then(function (c) { a.c = c; a.st = 'ok'; }, function () { a.st = 'err'; });
+    ex.pend[k] = p; return p;
+  }
+  function exAnswered() { return ex.ans.filter(Boolean).length; }
+  function exProgress() {
+    var d = exAnswered(), n = ex.list.length;
+    $('exDone').textContent = '已寫 ' + d + ' / ' + n + ' 題';
+    $('exFill').style.width = (d / n * 100) + '%';
+    var bs = $('exSheet').querySelectorAll('button');
+    bs.forEach(function (b, k) { b.classList.toggle('done', !!ex.ans[k]); b.classList.toggle('cur', k === ex.pos); });
+  }
+  function exGo(k) {
+    if (!ex || ex.over || k < 0 || k >= ex.list.length) return;
+    exSave(); ex.pos = k; exRender();
+  }
+  function buildSheet() {
+    var html = '', last = '';
+    ex.list.forEach(function (it, k) {
+      if (it.t !== last) { html += (last ? '</div>' : '') + '<h3>' + (it.t === '音' ? '🔤 字音' : '✍️ 字形') + '</h3><div class="sheet-grid">'; last = it.t; }
+      html += '<button type="button" data-k="' + k + '" aria-label="字' + it.t + '第 ' + ex.no[k] + ' 題">' + ex.no[k] + '</button>';
+    });
+    $('exSheet').innerHTML = html + '</div>';
+  }
+  $('exSheet').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-k]'); if (!b) return;
+    $('exSheet').hidden = true; $('exGrid').setAttribute('aria-expanded', 'false');
+    exGo(+b.dataset.k);
+  });
+  function toggleSheet(on) {
+    $('exSheet').hidden = !on; $('exGrid').setAttribute('aria-expanded', on ? 'true' : 'false');
+    if (on) { exSave(); exProgress(); $('exSheet').scrollIntoView({ block: 'start', behavior: 'smooth' }); }
+  }
+  $('exPrev').addEventListener('click', function () { exGo(ex.pos - 1); });
+  $('exNext').addEventListener('click', function () {
+    if (!ex) return;
+    if (ex.pos === ex.list.length - 1) toggleSheet(true); else exGo(ex.pos + 1);
+  });
+  $('exGrid').addEventListener('click', function () { toggleSheet($('exSheet').hidden); });
+  $('exSubmit').addEventListener('click', function () {
+    if (!ex || !ex.ready || ex.over) return;
+    exSave(); exProgress();
+    if (!ex.sure) {
+      var blank = ex.list.length - exAnswered();
+      ex.sure = true;
+      $('exSubmit').textContent = blank ? '還有 ' + blank + ' 題沒寫，確定交卷？' : '確定交卷？';
+      setTimeout(function () { if (ex && !ex.over) { ex.sure = false; $('exSubmit').textContent = '📮 交卷'; } }, 4000);
+      return;
+    }
+    say('交卷！毛毛老師來批改。', 'happy');
+    exEnd(false);
+  });
+  $('exQuit').addEventListener('click', function () {
+    if (!ex) return;
+    if (!window.confirm('確定要放棄這次模擬賽嗎？成績不會記錄。')) return;
+    exClose(); ex = null; refreshMenu(); mkRefresh();
+    say('沒關係，準備好再來挑戰！', 'think'); show('menu');
+  });
+  function exKey(e) {
+    if (!ex || !ex.ready || ex.over || e.target.tagName === 'INPUT') return;
+    var it = ex.list[ex.pos];
+    if (e.key === 'Enter') { e.preventDefault(); $('exNext').click(); }
+    else if (e.key === 'Backspace' && it.t === '音') { e.preventDefault(); kbBackspace(); }
+    else if (it.t === '音' && KEYMAP[e.code] && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      e.preventDefault();
+      var kb = KEYMAP[e.code]; kb.click(); kb.classList.add('hit'); setTimeout(function () { kb.classList.remove('hit'); }, 120);
+    }
+  }
+  // 把手寫格、注音鍵盤放回練習卡
+  function exClose() {
+    if (ex) { ex.over = true; clearInterval(ex.timer); }
+    $('exCount').hidden = true;
+    window.removeEventListener('beforeunload', exGuard);
+    document.body.classList.remove('exam-mode');
+    var card = document.querySelector('#quiz .card');
+    card.insertBefore($('padZone'), $('verdictBox')); card.insertBefore($('kbZone'), $('verdictBox'));
+    $('padZone').hidden = true; $('kbZone').hidden = true;
+    unlockScroll();
+  }
+
+  // 交卷與批改
+  function exEnd(timeUp) {
+    if (!ex || ex.over) return;
+    exSave();
+    ex.used = Math.min(ex.secs, Math.round((Date.now() - ex.start) / 1000));
+    ex.timeUp = timeUp;
+    exClose();
+    $('mrLabel').textContent = ex.lab; $('mrScore').textContent = '批改中…';
+    $('mrBreak').innerHTML = ''; $('mrNote').textContent = '毛毛老師正在看你寫的字，等一下下喔！'; $('mrWrong').innerHTML = '';
+    $('mrActions').hidden = true;
+    show('mockResult');
+    var e1 = ex;
+    var wait = function (ps) { return Promise.race([Promise.all(ps), new Promise(function (r) { setTimeout(r, 15000); })]); };
+    wait(Object.keys(e1.pend).map(function (k) { return e1.pend[k]; })).then(function () {
+      var retry = [];
+      e1.ans.forEach(function (a, k) { if (a && a.st === 'err') retry.push(exRecog(k, a)); });
+      return retry.length ? wait(retry) : null;
+    }).then(function () { if (ex === e1) grade(); });
+  }
+  function grade() {
+    ex.res = ex.list.map(function (it, k) {
+      var a = ex.ans[k];
+      if (!a) return { ok: false, blank: true };
+      if (it.t === '音') return { ok: a.v === it.z, your: a.v };
+      if (a.st !== 'ok') return { ok: false, err: true };
+      return { ok: a.c.slice(0, 3).indexOf(Array.from(it.w)[it.i]) >= 0, your: a.c[0] || '' };
+    });
+    ex.res.forEach(function (r) { r.auto = r.ok; });
+    // 錯題本：寫了的題目才記（沒寫到的不放進錯題本）
+    ex.list.forEach(function (it, k) {
+      var r = ex.res[k]; if (r.blank) return;
+      var q = rec[it.id] || [0, 0, 1];
+      if (r.ok) { q[0]++; q[2] = 1; } else { q[1]++; q[2] = 0; }
+      rec[it.id] = q;
+    });
+    saveRec();
+    var h = mkHist(), d = new Date();
+    h.push({ d: (d.getMonth() + 1) + '/' + d.getDate(), lab: ex.lab, s: 0 });
+    ex.hIdx = h.length - 1; mkSaveHist(h);
+    mrRender(true);
+  }
+  function mkScore() {
+    var n = ex.list.length, c = ex.res.filter(function (r) { return r.ok; }).length;
+    return { c: c, n: n, s: n === 200 ? c / 2 : Math.round(c / n * 200) / 2 };
+  }
+  function mrRender(first) {
+    var sc = mkScore(), ny = 0, cy = 0, nx = 0, cx = 0, blank = 0;
+    ex.list.forEach(function (it, k) {
+      var r = ex.res[k];
+      if (it.t === '音') { ny++; if (r.ok) cy++; } else { nx++; if (r.ok) cx++; }
+      if (r.blank) blank++;
+    });
+    var h = mkHist();
+    if (h[ex.hIdx]) { h[ex.hIdx].s = sc.s; mkSaveHist(h); }
+    var prevBest = h.filter(function (r, i) { return i !== ex.hIdx; }).reduce(function (m, r) { return Math.max(m, r.s); }, -1);
+    $('mrLabel').textContent = ex.lab + (ex.timeUp ? '・時間到自動交卷' : '');
+    $('mrScore').textContent = sc.s + ' 分';
+    $('mrBreak').innerHTML = '<span class="y">字音 ' + cy + ' / ' + ny + '</span><span class="x">字形 ' + cx + ' / ' + nx + '</span>' +
+      '<span>⏱️ ' + mmss(ex.used) + ' / ' + mmss(ex.secs) + '</span>' + (blank ? '<span>沒寫到 ' + blank + ' 題</span>' : '');
+    $('mrNote').textContent = (sc.n === 200 ? '每字 0.5 分，滿分 100 分。' : '本卷 ' + sc.n + ' 題，答對 ' + sc.c + ' 題，照正式卷 200 字換算成 100 分制。') +
+      (prevBest >= 0 && sc.s > prevBest ? '　🏅 新紀錄！' : prevBest >= 0 ? '　個人最佳 ' + prevBest + ' 分' : '');
+    var wrong = [];
+    ex.list.forEach(function (it, k) { if (!ex.res[k].auto) wrong.push(k); });
+    $('mrWrong').innerHTML = wrong.length ? '<p class="muted">要再練的字（' + wrong.length + '）：' +
+      (ex.list.some(function (it, k) { return it.t === '形' && !ex.res[k].auto && !ex.res[k].blank; }) ? '字形是電腦辨識的，如果明明寫對卻被判錯，可以按「算我對」。' : '') +
+      '</p><ul class="wrong-list mk">' + wrong.map(function (k) {
+        var it = ex.list[k], r = ex.res[k], a = ex.ans[k];
+        var w = Array.from(it.w).map(function (x, j) { return j === it.i ? '<em>' + esc(x) + '</em>' : esc(x); }).join('');
+        var ansTxt = it.t === '音' ? esc(it.z) : esc(Array.from(it.w)[it.i]) + '（' + esc(it.z) + '）';
+        var yours = r.blank ? '沒寫到' : it.t === '音' ? '你寫：' + esc(r.your) : r.err ? '辨識服務連不上' : r.your ? '電腦看到「' + esc(r.your) + '」' : '電腦認不出來';
+        var img = it.t === '形' && a ? '<img class="ink" alt="你寫的字" src="' + inkThumb(a) + '">' : '';
+        var btn = it.t === '形' && !r.blank ? '<br><button class="mini" type="button" data-k="' + k + '">' + (r.ok ? '↩️ 取消，算錯' : '⭕ 算我對') + '</button>' : '';
+        return '<li class="' + (r.ok ? 'fixed' : '') + '">' + img + '<span class="t ' + (it.t === '形' ? 'x' : '') + '">字' + it.t + ' ' + ex.no[k] + '</span><b>' + w + '</b><br>答案 ' + ansTxt + '<br>' + yours + btn + '</li>';
+      }).join('') + '</ul>' : '<p class="muted">全部答對！完美的魔法咒語！</p>';
+    $('mrActions').hidden = false;
+    $('mrPractice').hidden = !wrong.some(function (k) { return !ex.res[k].ok; });
+    if (first) {
+      var s = sc.s;
+      say(s >= 90 ? '汪汪汪！' + s + ' 分，比賽等級的大魔法師！' : s >= 75 ? s + ' 分，很厲害！把錯的字練熟就更接近滿分了。' : s >= 50 ? s + ' 分，魔力累積中！錯的字我都收進錯題本了。' : '模擬賽本來就很難，每一次都在進步，我陪你一起練！', s >= 75 ? 'happy' : 'think');
+    }
+  }
+  function inkThumb(a) {
+    var c = document.createElement('canvas'), S = 104, f = S / a.size, g = c.getContext('2d');
+    c.width = S; c.height = S;
+    g.lineCap = 'round'; g.lineJoin = 'round'; g.strokeStyle = '#222'; g.lineWidth = 4;
+    a.strokes.forEach(function (s) {
+      g.beginPath(); g.moveTo(s[0][0] * f, s[1][0] * f);
+      for (var j = 1; j < s[0].length; j++) g.lineTo(s[0][j] * f, s[1][j] * f);
+      if (s[0].length === 1) g.lineTo(s[0][0] * f + .1, s[1][0] * f);
+      g.stroke();
+    });
+    return c.toDataURL();
+  }
+  $('mrWrong').addEventListener('click', function (e) {
+    var b = e.target.closest('button.mini'); if (!b || !ex || !ex.res) return;
+    var k = +b.dataset.k, r = ex.res[k], it = ex.list[k], q = rec[it.id] || [0, 0, 1];
+    r.ok = !r.ok;
+    if (r.ok) { q[0]++; q[1] = Math.max(0, q[1] - 1); q[2] = 1; } else { q[1]++; q[0] = Math.max(0, q[0] - 1); q[2] = 0; }
+    rec[it.id] = q; saveRec();
+    mrRender(false);
+  });
+  $('mrPractice').addEventListener('click', function () {
+    var list = ex.list.filter(function (it, k) { return !ex.res[k].ok && !ex.res[k].blank; });
+    if (!list.length) list = ex.list.filter(function (it, k) { return !ex.res[k].ok; });
+    ex = null; start(shuffle(list), '模擬賽錯的字來特訓！一題一題對答案，練到會為止！');
+  });
+  $('mrAgain').addEventListener('click', function () { ex = null; mkGo(); });
+  $('mrBack').addEventListener('click', function () {
+    ex = null; refreshMenu(); mkRefresh(); show('menu');
+    say('想再挑戰模擬賽，還是先練習呢？');
+  });
 
   // ---------- 題庫一覽 ----------
   function renderBank(q) {
